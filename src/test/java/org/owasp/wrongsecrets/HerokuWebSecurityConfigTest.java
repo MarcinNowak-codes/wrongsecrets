@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 // Not working after migration to Spring Boot 3.0
 // Revert change when ticket https://github.com/spring-projects/spring-boot/issues/33451
 // is resolved.
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class HerokuWebSecurityConfigTest {
 
     @LocalServerPort
