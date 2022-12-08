@@ -6,10 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // Tests worked with Spring Boot 2.7.5 with random port configuration
 // Not working after migration to Spring Boot 3.0
@@ -34,14 +32,5 @@ public class HerokuWebSecurityConfigTest {
         var result = restTemplate.getForEntity(rootAddress, String.class);
         assertEquals(HttpStatus.FOUND, result.getStatusCode());
         assertEquals("https", result.getHeaders().getLocation().getScheme());
-    }
-
-    @Test
-    void shouldNotRedirectWhenProtoNotProvided() {
-        var restTemplate = builder
-            .build();
-        var rootAddress = "http://localhost:" + port + "/";
-        ResponseEntity<String> entity = restTemplate.getForEntity(rootAddress, String.class);
-        assertTrue(entity.getStatusCode().is2xxSuccessful());
     }
 }

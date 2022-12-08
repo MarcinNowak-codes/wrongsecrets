@@ -45,15 +45,12 @@
         <spring.cloud-version>2021.0.4</spring.cloud-version>
         <lombok.version>1.18.24</lombok.version>
         <aws.sdk.version>2.18.28</aws.sdk.version>
-        <asciidoctorj.version>2.5.7</asciidoctorj.version>
         <jruby.version>9.4.0.0</jruby.version>
         <bootstrap.version>5.2.2</bootstrap.version>
         <github.button.version>2.14.1</github.button.version>
         <gcp.sdk.version>3.4.0</gcp.sdk.version>
         <datatables.version>1.12.1</datatables.version>
         <jquery.version>3.6.1</jquery.version>
-        <thymeleaf.layout>3.1.0</thymeleaf.layout>
-        <asciidoctor.maven.plugin.version>2.2.2</asciidoctor.maven.plugin.version>
         <spring.security.version>6.0.0</spring.security.version>
         <com.azure.spring.version>4.4.1</com.azure.spring.version>
         <cyclonedx.core.version>7.2.0</cyclonedx.core.version>
@@ -68,21 +65,6 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>nz.net.ultraq.thymeleaf</groupId>
-            <artifactId>thymeleaf-layout-dialect</artifactId>
-            <version>${thymeleaf.layout}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
-            <version>3.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -134,16 +116,6 @@
             <groupId>org.linguafranca.pwdb</groupId>
             <artifactId>KeePassJava2</artifactId>
             <version>${KeePassJava2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctorj-api</artifactId>
-            <version>${asciidoctorj.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctorj</artifactId>
-            <version>${asciidoctorj.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jruby</groupId>
@@ -288,28 +260,6 @@
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludeDevtools>true</excludeDevtools>
-                    <!-- See http://docs.spring.io/spring-boot/docs/current/reference/html/howto-build.html#howto-extract-specific-libraries-when-an-executable-jar-runs -->
-                    <requiresUnpack>
-                        <dependency>
-                            <groupId>org.asciidoctor</groupId>
-                            <artifactId>asciidoctorj</artifactId>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.jruby</groupId>
-                            <artifactId>jruby-complete</artifactId>
-                        </dependency>
-                    </requiresUnpack>
-                    <jvmArguments>
-                        <!-- -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000-->
-                    </jvmArguments>
-                    <fork>true</fork>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.2.0</version>
@@ -320,32 +270,6 @@
                     <suppressionsLocation>config/checkstyle/suppressions.xml</suppressionsLocation>
                     <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
                 </configuration>
-            </plugin>
-            <plugin>
-                <!-- https://github.com/asciidoctor/asciidoctor-maven-examples/blob/main/asciidoc-to-html-example/pom.xml -->
-                <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>${asciidoctor.maven.plugin.version}</version>
-                <configuration>
-                    <baseDir>${project.basedir}</baseDir>
-                    <sourceDirectory>src/main/resources/explanations</sourceDirectory>
-                    <outputDirectory>${project.build.outputDirectory}/explanations</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>asciidoc-to-html</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>process-asciidoc</goal>
-                        </goals>
-                        <configuration>
-                            <headerFooter>false</headerFooter>
-                            <attributes>
-                                <docType>null</docType>
-                            </attributes>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
@@ -386,57 +310,6 @@
                 </executions>
             </plugin>
             <!-- todo: #178 add the missing plugins and profiles from https://central.sonatype.org/publish/publish-maven/-->
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.12.1</version>
-                <executions>
-                    <execution>
-                        <id>install node and npm</id>
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <nodeVersion>v16.13.2</nodeVersion> <!-- download node from https://nodejs.org/dist/ -->
-                            <workingDirectory>js</workingDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>npm install</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <arguments>install</arguments>
-                            <workingDirectory>js</workingDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-
-                    <executable>./js/node_modules/.bin/javascript-obfuscator${script.extension}</executable>
-                    <arguments>
-                        <argument>./js/index.js</argument>
-                        <argument>--output</argument>
-                        <argument>./target/classes/static/js/index.js</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
