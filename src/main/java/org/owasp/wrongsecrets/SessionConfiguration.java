@@ -1,11 +1,11 @@
 package org.owasp.wrongsecrets;
 
+import jakarta.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSessionListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import jakarta.servlet.http.HttpSessionEvent;
-import jakarta.servlet.http.HttpSessionListener;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Configuration
@@ -29,7 +29,4 @@ public class SessionConfiguration {
         };
     }
 
-    public AtomicInteger getCounter() {
-        return numberOfSessions;
-    }
 }
