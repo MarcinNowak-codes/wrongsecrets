@@ -10,7 +10,7 @@
     <groupId>org.owasp</groupId>
     <artifactId>wrongsecrets-2.7</artifactId>
     <version>jre18test2-SNAPSHOT</version>
-    <name>OWASP WrongSecrets</name>
+    <name>OWASP WrongSecrets 2.7</name>
     <description>Examples with how to not use secrets</description>
     <url>https://owasp.org/www-project-wrongsecrets/</url>
     <scm>
