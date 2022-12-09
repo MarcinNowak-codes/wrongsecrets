@@ -9,7 +9,7 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.owasp</groupId>
-    <artifactId>wrongsecrets</artifactId>
+    <artifactId>wrongsecrets-2.7</artifactId>
     <version>jre18test2-SNAPSHOT</version>
 
     <properties>
