@@ -11,9 +11,6 @@ import java.util.List;
 @Getter
 public abstract class Challenge {
 
-    private final ScoreCard scoreCard;
-
-    public abstract Spoiler spoiler();
 
     protected abstract boolean answerCorrect(String answer);
 
@@ -26,14 +23,6 @@ public abstract class Challenge {
     public abstract boolean isLimittedWhenOnlineHosted();
 
     public abstract boolean canRunInCTFMode();
-
-    public boolean solved(String answer) {
-        var correctAnswer = answerCorrect(answer);
-        if (correctAnswer) {
-            scoreCard.completeChallenge(this);
-        }
-        return correctAnswer;
-    }
 
     public String getExplanation() {
         return this.getClass().getSimpleName().toLowerCase();
