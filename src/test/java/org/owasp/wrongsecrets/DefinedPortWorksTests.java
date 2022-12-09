@@ -6,16 +6,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-// Tests worked with Spring Boot 2.7.5 with random port configuration
-// Not working after migration to Spring Boot 3.0
-// Revert change when ticket https://github.com/spring-projects/spring-boot/issues/33451
-// is resolved.
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class HerokuWebSecurityConfigTest {
+public class DefinedPortWorksTests {
 
     @LocalServerPort
     private int port;
@@ -25,11 +22,11 @@ public class HerokuWebSecurityConfigTest {
 
     @Test
     void shouldRedirectWhenProtoProvided() {
-        var restTemplate = builder
-            .defaultHeader("x-forwarded-proto", "value")
-            .build();
-        var rootAddress = "http://localhost:" + port + "/heroku";//note we loosely ask for "heroku" to be part of the url
-        var result = restTemplate.getForEntity(rootAddress, String.class);
+        RestTemplate restTemplate = builder
+                .defaultHeader("x-forwarded-proto", "value")
+                .build();
+        String rootAddress = "http://localhost:" + port + "/heroku";
+        ResponseEntity<String> result = restTemplate.getForEntity(rootAddress, String.class);
         assertEquals(HttpStatus.FOUND, result.getStatusCode());
         assertEquals("https", result.getHeaders().getLocation().getScheme());
     }
