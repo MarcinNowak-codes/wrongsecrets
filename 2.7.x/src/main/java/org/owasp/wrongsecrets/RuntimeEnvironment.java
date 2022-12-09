@@ -1,13 +1,11 @@
 package org.owasp.wrongsecrets;
 
 import lombok.Getter;
-import org.owasp.wrongsecrets.challenges.Challenge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -47,22 +45,6 @@ public class RuntimeEnvironment {
     @Getter
     private final Environment runtimeEnvironment;
 
-    private boolean isK8sUnlockedInCTFMode() {
-        String defaultValueChallenge5 = "if_you_see_this_please_use_k8s";
-        return ctfModeEnabled && !challenge5Value.equals(defaultValueChallenge5);
-    }
-
-    private boolean isVaultUnlockedInCTFMode() {
-        String defaultVaultAnswer = "ACTUAL_ANSWER_CHALLENGE7";
-        String secondDefaultVaultAnswer = "if_you_see_this_please_use_K8S_and_Vault";
-        return ctfModeEnabled && !challenge7Value.equals(defaultVaultAnswer) && !challenge7Value.equals(secondDefaultVaultAnswer);
-    }
-
-    private boolean isCloudUnlockedInCTFMode() {
-        String defaultValueAWSValue = "if_you_see_this_please_use_AWS_Setup";
-        return ctfModeEnabled && !defaultChallenge9Value.equals(defaultValueAWSValue);
-    }
-
     @Autowired
     public RuntimeEnvironment(@Value("${K8S_ENV}") String currentRuntimeEnvironment) {
         this.runtimeEnvironment = Environment.fromId(currentRuntimeEnvironment);
@@ -70,29 +52,6 @@ public class RuntimeEnvironment {
 
     public RuntimeEnvironment(Environment runtimeEnvironment) {
         this.runtimeEnvironment = runtimeEnvironment;
-    }
-
-    public boolean canRun(Challenge challenge) {
-        if (isCloudUnlockedInCTFMode()) {
-            return true;
-        }
-        if (isVaultUnlockedInCTFMode() && isK8sUnlockedInCTFMode()) {
-            return challenge.supportedRuntimeEnvironments().contains(runtimeEnvironment)
-                || challenge.supportedRuntimeEnvironments().contains(DOCKER)
-                || challenge.supportedRuntimeEnvironments().contains(K8S)
-                || challenge.supportedRuntimeEnvironments().contains(VAULT);
-        }
-        if (isK8sUnlockedInCTFMode()) {
-            return challenge.supportedRuntimeEnvironments().contains(runtimeEnvironment)
-                || challenge.supportedRuntimeEnvironments().contains(DOCKER)
-                || challenge.supportedRuntimeEnvironments().contains(K8S);
-        }
-        return challenge.supportedRuntimeEnvironments().contains(runtimeEnvironment)
-            || !Collections.disjoint(envToOverlappingEnvs.get(runtimeEnvironment), challenge.supportedRuntimeEnvironments());
-    }
-
-    public boolean runtimeInCTFMode() {
-        return ctfModeEnabled;
     }
 
 }
